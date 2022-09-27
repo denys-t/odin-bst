@@ -107,6 +107,16 @@ class Tree
     end
   end
 
+  def find(value, node = @root)
+    if value == node.data 
+      return node
+    elsif value > node.data
+      return node.right.nil? ? 'Not found' : find(value, node.right)
+    else
+      return node.left.nil? ? 'Not found' : find(value, node.left)
+    end
+  end
+
   private
 
   def build_tree(array)
@@ -131,5 +141,3 @@ class Tree
 end
 
 t = Tree.new([0,1,3,5,7,9,11,13,15,17,19,21,23,25,27,29])
-t.pretty_print
-t.delete(7)
