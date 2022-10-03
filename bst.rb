@@ -23,10 +23,9 @@ class Tree
   end
 
   def insert(value)
-
     node = @root
     new_node = Node.new(value)
-    
+
     loop do
       if value == node.data
         return
@@ -74,7 +73,7 @@ class Tree
             replacing_parent = replacing_node
             replacing_node = replacing_node.left
           end
-          
+
           replacing_parent.left = replacing_node.right
           replacing_node.left = node.left
           replacing_node.right = node.right
@@ -117,6 +116,48 @@ class Tree
     end
   end
 
+  def level_order_iterative(&block)
+    queue = [].append(@root)
+    result = [] unless block_given?
+
+    # iterative approach
+    until queue.length.zero?
+      curr_el = queue.shift
+
+      queue.append(curr_el.left) unless curr_el.left.nil?
+      queue.append(curr_el.right) unless curr_el.right.nil?
+
+      if block_given?
+        yield curr_el
+      else
+        result.append(curr_el.data)
+      end
+    end
+
+    return result unless block_given?
+  end
+
+  # def level_order_recursive(&block)
+  #   def lor(queue, &block)
+  #     return if queue.length.zero?
+
+  #     curr_el = queue.shift
+
+  #     queue.append(curr_el.left) unless curr_el.left.nil?
+  #     queue.append(curr_el.right) unless curr_el.right.nil?
+
+  #     if block_given?
+  #       yield curr_el
+  #     else
+  #       result.append(curr_el.data)
+  #     end
+
+  #   end
+    
+
+  #   queue = [].append(@root)
+  # end
+
   private
 
   def build_tree(array)
@@ -140,4 +181,5 @@ class Tree
   end
 end
 
-t = Tree.new([0,1,3,5,7,9,11,13,15,17,19,21,23,25,27,29])
+#t = Tree.new([0,1,3,5,7,9,11,13,15,17,19,21,23,25,27,29])
+t = Tree.new([0,1,3,5,7,9])
