@@ -158,6 +158,38 @@ class Tree
   #   queue = [].append(@root)
   # end
 
+  def inorder(node = @root, &block)
+    if block_given?
+      yield node if node.left.nil? && node.right.nil?
+
+      inorder(node.left, block) unless node.left.nil?
+
+      yield node
+
+      inorder(node.right, block) unless node.right.nil?
+    else
+      result = [] if node == @root
+
+      result.append(node.data) if node.left.nil? && node.right.nil?
+
+      inorder(node.left) unless node.left.nil?
+
+      result.append(node.data)
+
+      inorder(node.right) unless node.right.nil?
+
+      return result
+    end
+  end
+
+  def preorder(&block)
+  
+  end
+
+  def postorder(&block)
+  
+  end
+
   private
 
   def build_tree(array)
