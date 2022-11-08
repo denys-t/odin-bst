@@ -178,8 +178,8 @@ class Tree
   end
 
   def height(node = @root)
-    height_left = (node.left.nil? ? 0 : height(node.left))
-    height_right = (node.right.nil? ? 0 : height(node.right))
+    height_left = (node.left.nil? ? -1 : height(node.left))
+    height_right = (node.right.nil? ? -1 : height(node.right))
 
     if height_left > height_right
       return height_left + 1
