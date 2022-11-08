@@ -177,6 +177,17 @@ class Tree
     traverse_tree(@root, 'post-order', [], &block)
   end
 
+  def height(node = @root)
+    height_left = (node.left.nil? ? 0 : height(node.left))
+    height_right = (node.right.nil? ? 0 : height(node.right))
+
+    if height_left > height_right
+      return height_left + 1
+    else
+      return height_right + 1
+    end
+  end
+
   private
 
   def build_tree(array)
