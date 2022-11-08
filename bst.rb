@@ -107,7 +107,7 @@ class Tree
   end
 
   def find(value, node = @root)
-    if value == node.data 
+    if value == node.data
       return node
     elsif value > node.data
       return node.right.nil? ? 'Not found' : find(value, node.right)
@@ -137,36 +137,43 @@ class Tree
     return result unless block_given?
   end
 
-  # def level_order_recursive(&block)
-  #   def lor(queue, &block)
-  #     return if queue.length.zero?
+  def level_order_recursive(&block)
 
-  #     curr_el = queue.shift
+    def lor(queue, result, &block)
+      if queue.empty?
+        return result unless block_given?
+        return
+      end
 
-  #     queue.append(curr_el.left) unless curr_el.left.nil?
-  #     queue.append(curr_el.right) unless curr_el.right.nil?
+      curr_el = queue.shift
 
-  #     if block_given?
-  #       yield curr_el
-  #     else
-  #       result.append(curr_el.data)
-  #     end
+      queue.append(curr_el.left) unless curr_el.left.nil?
+      queue.append(curr_el.right) unless curr_el.right.nil?
 
-  #   end
-    
+      if block_given?
+        yield curr_el
+      else
+        result.append(curr_el.data)
+      end
 
-  #   queue = [].append(@root)
-  # end
+      lor(queue, result, &block)
+    end
+
+    queue = [@root]
+    result = [] unless block_given?
+
+    lor(queue, result, &block)
+  end
 
   def inorder(node = @root, &block)
     if block_given?
       yield node if node.left.nil? && node.right.nil?
 
-      inorder(node.left, block) unless node.left.nil?
+      inorder(node.left, &block) unless node.left.nil?
 
       yield node
 
-      inorder(node.right, block) unless node.right.nil?
+      inorder(node.right, &block) unless node.right.nil?
     else
       result = [] if node == @root
 
