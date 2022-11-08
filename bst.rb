@@ -165,36 +165,16 @@ class Tree
     lor(queue, result, &block)
   end
 
-  def inorder(node = @root, &block)
-    if block_given?
-      yield node if node.left.nil? && node.right.nil?
-
-      inorder(node.left, &block) unless node.left.nil?
-
-      yield node
-
-      inorder(node.right, &block) unless node.right.nil?
-    else
-      result = [] if node == @root
-
-      result.append(node.data) if node.left.nil? && node.right.nil?
-
-      inorder(node.left) unless node.left.nil?
-
-      result.append(node.data)
-
-      inorder(node.right) unless node.right.nil?
-
-      return result
-    end
+  def inorder(&block)
+    traverse_tree(@root, 'in-order', [], &block)
   end
 
   def preorder(&block)
-  
+    traverse_tree(@root, 'pre-order', [], &block)
   end
 
   def postorder(&block)
-  
+    traverse_tree(@root, 'post-order', [], &block)
   end
 
   private
@@ -217,6 +197,24 @@ class Tree
     node.right = bst(array[mid_i + 1..array.length - 1])
 
     return node
+  end
+
+  def traverse_tree(node, method, result = [], &block)
+    if block_given?
+      yield node if method == 'pre-order'
+      traverse_tree(node.left, method, result, &block) unless node.left.nil?
+      yield node if method == 'in-order'
+      traverse_tree(node.right, method, result, &block) unless node.right.nil?
+      yield node if method == 'post-order'
+    else
+      result.append(node.data) if method == 'pre-order'
+      traverse_tree(node.left, method, result, &block) unless node.left.nil?
+      result.append(node.data) if method == 'in-order'
+      traverse_tree(node.right, method, result, &block) unless node.right.nil?
+      result.append(node.data) if method == 'post-order'
+
+      return result
+    end
   end
 end
 
