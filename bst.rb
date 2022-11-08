@@ -188,6 +188,23 @@ class Tree
     end
   end
 
+  def depth(node = @root)
+    curr_node = @root
+    depth = 0
+
+    until node == curr_node do
+      if node.data < curr_node.data
+        depth += 1
+        curr_node = curr_node.left
+      elsif node.data > curr_node.data
+        depth += 1
+        curr_node = curr_node.right
+      end
+    end
+
+    return depth
+  end
+
   private
 
   def build_tree(array)
