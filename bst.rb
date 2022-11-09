@@ -205,6 +205,10 @@ class Tree
     return depth
   end
 
+  def balanced?
+    (height(@root.left) - height(@root.right)).between?(-1, 1)
+  end
+
   private
 
   def build_tree(array)
