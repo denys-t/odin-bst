@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tree
   def initialize(array)
     @root = build_tree(array)
