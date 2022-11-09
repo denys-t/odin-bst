@@ -1,16 +1,3 @@
-class Node
-  attr_accessor :left, :right, :data
-
-  def initialize(data)
-    @data = data
-    @left = @right = nil
-  end
-
-  def <=>(other)
-    @data <=> other.data
-  end
-end
-
 class Tree
   def initialize(array)
     @root = build_tree(array)
@@ -107,20 +94,17 @@ class Tree
   end
 
   def find(value, node = @root)
-    if value == node.data
-      return node
-    elsif value > node.data
-      return node.right.nil? ? 'Not found' : find(value, node.right)
-    else
-      return node.left.nil? ? 'Not found' : find(value, node.left)
-    end
+    return node if value == node.data
+
+    return node.right.nil? ? 'Not found' : find(value, node.right) if value > node.data
+
+    return node.left.nil? ? 'Not found' : find(value, node.left)
   end
 
   def level_order_iterative(&block)
     queue = [].append(@root)
     result = [] unless block_given?
 
-    # iterative approach
     until queue.length.zero?
       curr_el = queue.shift
 
@@ -138,27 +122,6 @@ class Tree
   end
 
   def level_order_recursive(&block)
-
-    def lor(queue, result, &block)
-      if queue.empty?
-        return result unless block_given?
-        return
-      end
-
-      curr_el = queue.shift
-
-      queue.append(curr_el.left) unless curr_el.left.nil?
-      queue.append(curr_el.right) unless curr_el.right.nil?
-
-      if block_given?
-        yield curr_el
-      else
-        result.append(curr_el.data)
-      end
-
-      lor(queue, result, &block)
-    end
-
     queue = [@root]
     result = [] unless block_given?
 
@@ -209,6 +172,13 @@ class Tree
     (height(@root.left) - height(@root.right)).between?(-1, 1)
   end
 
+  def rebalance
+    unless balanced?
+      data = inorder()
+      @root = build_tree(data)
+    end
+  end
+
   private
 
   def build_tree(array)
@@ -248,7 +218,25 @@ class Tree
       return result
     end
   end
-end
 
-#t = Tree.new([0,1,3,5,7,9,11,13,15,17,19,21,23,25,27,29])
-t = Tree.new([0,1,3,5,7,9])
+  def lor(queue, result, &block)
+    if queue.empty?
+      return result unless block_given?
+
+      return
+    end
+
+    curr_el = queue.shift
+
+    queue.append(curr_el.left) unless curr_el.left.nil?
+    queue.append(curr_el.right) unless curr_el.right.nil?
+
+    if block_given?
+      yield curr_el
+    else
+      result.append(curr_el.data)
+    end
+
+    lor(queue, result, &block)
+  end
+end
